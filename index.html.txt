@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Community Mobilizers</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <h1>🌍 Community Mobilizers Portal</h1>
+    <nav>
+        <button onclick="showTab('home')">Home</button>
+        <button onclick="showTab('mobilizers')">Mobilizers</button>
+        <button onclick="showTab('login')">Login</button>
+        <button onclick="showTab('upload')">Upload Photo</button>
+    </nav>
+</header>
+
+<!-- HOME -->
+<section id="home" class="tab active">
+    <h2>Welcome</h2>
+    <p>This website is created for Community Mobilizers to showcase their work and profiles.</p>
+</section>
+
+<!-- MOBILIZERS -->
+<section id="mobilizers" class="tab">
+    <h2>Our Mobilizers</h2>
+
+    <div class="card">
+        <img id="photo1" src="https://via.placeholder.com/150">
+        <h3>Mobilizer 1</h3>
+        <p>Area: Ward 1</p>
+        <p>Work: Waste management awareness</p>
+    </div>
+
+    <div class="card">
+        <img id="photo2" src="https://via.placeholder.com/150">
+        <h3>Mobilizer 2</h3>
+        <p>Area: Ward 2</p>
+        <p>Work: Plastic ban enforcement</p>
+    </div>
+
+</section>
+
+<!-- LOGIN -->
+<section id="login" class="tab">
+    <h2>Login (Demo)</h2>
+    <input type="text" id="username" placeholder="User ID">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+    <p id="loginMsg"></p>
+</section>
+
+<!-- UPLOAD -->
+<section id="upload" class="tab">
+    <h2>Upload Your Photo</h2>
+    <input type="file" id="photoInput" accept="image/*">
+    <select id="photoSelect">
+        <option value="photo1">Mobilizer 1</option>
+        <option value="photo2">Mobilizer 2</option>
+    </select>
+    <button onclick="uploadPhoto()">Upload</button>
+</section>
+
+<script>
+function showTab(tabId) {
+    document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+}
+
+function login() {
+    const user = document.getElementById("username").value;
+    const pass = document.getElementById("password").value;
+
+    if (user === "admin" && pass === "1234") {
+        localStorage.setItem("loggedIn", "yes");
+        document.getElementById("loginMsg").innerText = "Login successful!";
+    } else {
+        document.getElementById("loginMsg").innerText = "Invalid login!";
+    }
+}
+
+function uploadPhoto() {
+    if (localStorage.getItem("loggedIn") !== "yes") {
+        alert("Please login first");
+        return;
+    }
+
+    const file = document.getElementById("photoInput").files[0];
+    const target = document.getElementById("photoSelect").value;
+
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        document.getElementById(target).src = e.target.result;
+        localStorage.setItem(target, e.target.result);
+    };
+    reader.readAsDataURL(file);
+}
+
+window.onload = function() {
+    ["photo1", "photo2"].forEach(id => {
+        const saved = localStorage.getItem(id);
+        if (saved) document.getElementById(id).src = saved;
+    });
+};
+</script>
+
+</body>
+</html>
